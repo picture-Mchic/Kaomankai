@@ -524,6 +524,18 @@ function slugify(str){
   return 'cat-' + str.replace(/[^a-zA-Z0-9ก-๙]+/g, '-');
 }
 
+const IMG_EXTS = ['.jpg', '.png', '.jpeg', '.webp'];
+function thumbHtml(m){
+  if (!m.image) return m.emoji;
+  return `<img src="${m.image}.jpg" alt="${escapeHtml(m.name)}" data-try="0" data-emoji="${m.emoji}" onerror="imgFallback(this)">`;
+}
+function imgFallback(img){
+  const base = img.getAttribute('src').replace(/\.[a-z]+$/, '');
+  const n = Number(img.dataset.try) + 1;
+  if (n < IMG_EXTS.length) { img.dataset.try = n; img.src = base + IMG_EXTS[n]; }
+  else img.replaceWith(document.createTextNode(img.dataset.emoji));
+}
+
 function renderMenuList(){
   const tabsEl = document.getElementById('category-tabs');
   const listEl = document.getElementById('menu-list');
@@ -545,7 +557,7 @@ function renderMenuList(){
       return `
       <div class="menu-row ${m.available ? '' : 'sold-out'}" data-id="${m.id}">
         <div class="menu-row-thumb">
-          ${m.image ? `<img src="${m.image}" alt="${escapeHtml(m.name)}">` : m.emoji}
+          ${thumbHtml(m)}
         </div>
         <div class="menu-row-info">
           <p class="menu-row-name">${escapeHtml(m.name)}</p>
