@@ -4,9 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>สั่งข้าวมันไก่พรีเมียม</title>
+<script>
+const IMG_EXTS = ['.jpg', '.png', '.jpeg', '.webp'];
+function imgFallback(img){
+  const base = img.getAttribute('src').replace(/\.[a-z]+$/, '');
+  const n = Number(img.dataset.try) + 1;
+  if (n < IMG_EXTS.length) { img.dataset.try = n; img.src = base + IMG_EXTS[n]; }
+  else img.replaceWith(document.createTextNode(img.dataset.emoji));
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600&display=swap');
-
   :root{
     --bg: #FDFBF7;
     --paper: #FFFFFF;
@@ -350,10 +360,8 @@
 <body>
 <div class="wrap">
 
-  <img class="brand-banner" src="logo.jpg" alt="ข้าวมันไก่พรีเมียม" onerror="this.style.display='none'">
-
   <header>
-    <div class="logo">😋</div>
+    <div class="logo"><img src="logo.jpg" alt="โลโก้ร้าน" data-try="0" data-emoji="😋" onerror="imgFallback(this)"></div>
     <h1>ร้านข้าวมันไก่<br>อมยิ้ม</h1>
   </header>
 
@@ -493,9 +501,9 @@
 <!-- Modal ขอบคุณ (หลังส่งสำเร็จ) -->
 <div class="modal-overlay" id="success-modal">
   <div class="modal-box" style="text-align: center; padding: 32px 24px;">
-    <img src="ChatGPT Image 7 ส.ค. 2569 09_42_14.png" alt="ขอบคุณครับ" 
+    <img src="Thank.jpg" data-try="0" data-emoji="" alt="ขอบคุณครับ" 
          style="width: 100%; max-width: 220px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); object-fit: cover;"
-         onerror="this.style.display='none'">
+         onerror="imgFallback(this)">
     <h3 style="font-family: 'Noto Sans Thai', sans-serif; color: var(--success); margin: 0 0 8px; font-size: 24px; font-weight: 600;">ขอบคุณครับ!</h3>
     <p style="color: var(--ink-soft); margin: 0 0 16px; font-size: 15px;" id="success-msg">รับออเดอร์เรียบร้อยแล้ว</p>
     <div class="order-no-badges" id="order-no-badges"></div>
@@ -524,18 +532,10 @@ function slugify(str){
   return 'cat-' + str.replace(/[^a-zA-Z0-9ก-๙]+/g, '-');
 }
 
-const IMG_EXTS = ['.jpg', '.png', '.jpeg', '.webp'];
 function thumbHtml(m){
   if (!m.image) return m.emoji;
-  return `<img src="${m.image}.jpg" alt="${escapeHtml(m.name)}" data-try="0" data-emoji="${m.emoji}" onerror="imgFallback(this)">`;
+  return `<img src="${m.image}.jpg" loading="lazy" decoding="async" alt="${escapeHtml(m.name)}" data-try="0" data-emoji="${m.emoji}" onerror="imgFallback(this)">`;
 }
-function imgFallback(img){
-  const base = img.getAttribute('src').replace(/\.[a-z]+$/, '');
-  const n = Number(img.dataset.try) + 1;
-  if (n < IMG_EXTS.length) { img.dataset.try = n; img.src = base + IMG_EXTS[n]; }
-  else img.replaceWith(document.createTextNode(img.dataset.emoji));
-}
-
 function renderMenuList(){
   const tabsEl = document.getElementById('category-tabs');
   const listEl = document.getElementById('menu-list');
@@ -922,7 +922,7 @@ document.getElementById('f-add-cart').addEventListener('click', () => {
 // เมื่อกดปุ่ม "ยืนยันออเดอร์ทั้งหมด" — เปิด modal สรุปรายการทั้งหมดในตะกร้า
 document.getElementById('cart-checkout-btn').addEventListener('click', async () => {
   if (cart.length === 0) return;
-  await loadMenuStatus();
+  loadMenuStatus(); // ไม่รอ เพื่อไม่ให้หน่วง ใช้สถานะล่าสุดที่โหลดไว้ตรวจก่อน
   const closedItems = cart.filter(it => { const m = MENU_DATA.find(x => x.name === it.menuName); return m && !m.available; });
   if (closedItems.length) {
     cart = cart.filter(it => !closedItems.includes(it));
