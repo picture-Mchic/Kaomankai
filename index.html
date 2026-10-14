@@ -50,13 +50,13 @@ function imgFallback(img){
   }
 
   header {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+    margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--line);
   }
   header .logo {
-    width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+    width: min(62vw, 300px); aspect-ratio: 1 / 1; border-radius: 16px; flex-shrink: 0;
     overflow: hidden; display: flex; align-items: center; justify-content: center;
-    background: var(--gold); font-size: 28px; box-shadow: 0 2px 8px rgba(197,160,89,0.25);
+    background: var(--paper); font-size: 72px; box-shadow: 0 6px 20px rgba(0,0,0,0.08);
   }
   header .logo img { width: 100%; height: 100%; object-fit: cover; }
   header h1 {
@@ -325,9 +325,9 @@ function imgFallback(img){
   .menu-row:first-child { padding-top: 4px; }
   .menu-row:hover { opacity: 0.85; }
   .menu-row-thumb {
-    width: 84px; height: 84px; border-radius: 10px; flex-shrink: 0; overflow: hidden;
+    width: 120px; height: 120px; border-radius: 12px; flex-shrink: 0; overflow: hidden;
     background: linear-gradient(135deg, #2C3539 0%, #1a1f22 100%);
-    display: flex; align-items: center; justify-content: center; font-size: 34px;
+    display: flex; align-items: center; justify-content: center; font-size: 48px;
     position: relative;
   }
   .menu-row-thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -362,7 +362,6 @@ function imgFallback(img){
 
   <header>
     <div class="logo"><img src="logo.jpg" alt="โลโก้ร้าน" data-try="0" data-emoji="😋" onerror="imgFallback(this)"></div>
-    <h1>ร้านข้าวมันไก่<br>อมยิ้ม</h1>
   </header>
 
   <div id="setup-warning" class="setup-warning" style="display:none;">
